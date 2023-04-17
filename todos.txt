@@ -1,3 +1,0 @@
-Haber sitelerinin çıkarılması.
- (TR’de haberleri veren API’lar varmış.)
-Daha sonra bu siteleri crawl edecek kodun yazılması.
