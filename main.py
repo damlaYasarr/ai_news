@@ -28,19 +28,24 @@ def crawling(url):
         response = requests.get(url)
         if response.status_code == 200:
 
-            soup = BeautifulSoup(response.content, 'html.parser')
+            soup = BeautifulSoup(response.content, 'lxml')
 
     # get contents that wanted
-            links = soup.find_all('a')
+            links = soup.find_all('h2')
+          
             for link in links:
-                  href = link.get('href')
-                  print(href)
+                  #href = link.get('href')
+                  print(link.text)
         else:
              print(f'Hata kodu: {response.status_code}')         
 if __name__=='__main__':
     a=[]
     for i in  usejson(data.decode("utf-8")):
+      
+        print(i)
         a.append(i) 
     for i in a:
-            
+          
         crawling(i)        
+        
+     
