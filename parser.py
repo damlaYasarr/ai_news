@@ -36,12 +36,12 @@ def xmlparsing(xmlfile):
         # iterate child elements of item
         for child in item:
             if child.tag == 'haber_link':
-                news['haber_link'] = child.text
+                news['haber_link'] = 'https://www.trthaber.com/'+child.text
             if child.tag == 'haber_manset':
-                news['haber_aciklama'] = child.text
+                news['haber_aciklama'] = child.text.replace('\"','')
             if child.tag == 'haber_metni':
                 
-                news['haber_metni'] = tagparser(["p", "\n\t"],child.text.strip())
+                news['haber_metni'] = tagparser(["p", "\n\t"],child.text)
                 
      
         # append news dictionary to news items list
@@ -57,11 +57,18 @@ def tagparser(tag, text):
     paragraphs = soup.find_all(tag)
     for p1, p2 in zip(paragraphs, paragraphs[1:]):
         if str(p1.next_sibling) == '\n\t'  and str(p2.next_sibling) == '\n\t':
-            newtext.append(p1.text.strip())
+            newtext.append(p1.text)
         else:
-            newtext.append(p1.text.strip())
-    newtext.append(paragraphs[-1].text.strip())  # add last paragraph
-    return newtext
+            newtext.append(p1.text)
+    newtext.append(paragraphs[-1].text)  # add last paragraph
+  
+    newtext = [item.strip().replace('\n\t\t','') for item in newtext]
+    newtext = [item.strip().replace('\n\t','') for item in newtext]
+    newtext = [item.strip().replace('\n','') for item in newtext]
+    newtext = [item.strip().replace('\"','') for item in newtext]
+    
+    text=" ".join(newtext)
+    return text
 def savetoJson(newsitems, filename):
     with open(filename, 'w',encoding='utf-8') as f:
         json.dump(newsitems, f,  ensure_ascii=False,indent=4)
