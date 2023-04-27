@@ -1,5 +1,3 @@
-ai/todos.txt
-*
-!*.xml
+*.xml
+*.txt
 *.json
-!spec/*.json
