@@ -1,7 +1,7 @@
 import json
 import requests
 import xml.etree.ElementTree as ET
-
+from bs4 import BeautifulSoup
 
 
 def loadRSS():
@@ -40,19 +40,34 @@ def xmlparsing(xmlfile):
             if child.tag == 'haber_manset':
                 news['haber_aciklama'] = child.text
             if child.tag == 'haber_metni':
-                news['haber_metni'] = child.text
+                
+                news['haber_metni'] = tagparser(["p", "\n\t"],child.text.strip())
+                
      
         # append news dictionary to news items list
         newsitems.append(news)
     print(count)
     # return news items list
+    
+        
     return newsitems
+def tagparser(tag, text):
+    newtext=[]
+    soup = BeautifulSoup(text, 'html.parser')
+    paragraphs = soup.find_all(tag)
+    for p1, p2 in zip(paragraphs, paragraphs[1:]):
+        if str(p1.next_sibling) == '\n\t'  and str(p2.next_sibling) == '\n\t':
+            newtext.append(p1.text.strip())
+        else:
+            newtext.append(p1.text.strip())
+    newtext.append(paragraphs[-1].text.strip())  # add last paragraph
+    return newtext
 def savetoJson(newsitems, filename):
     with open(filename, 'w',encoding='utf-8') as f:
         json.dump(newsitems, f,  ensure_ascii=False,indent=4)
   
 if __name__=='__main__':
-    #loadRSS()
+    loadRSS()
   
     # parse xml file
     newsitems = xmlparsing(r'C:\Users\damla\Desktop\ai\xml_genel.xml') 
