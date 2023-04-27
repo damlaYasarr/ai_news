@@ -1,1 +1,5 @@
 ai/todos.txt
+*
+!*.xml
+*.json
+!spec/*.json

@@ -25,17 +25,22 @@ def usejson(data):
          urls.append(url)
     return urls     
 def crawling(url):
+        content=[]
         response = requests.get(url)
         if response.status_code == 200:
 
             soup = BeautifulSoup(response.content, 'lxml')
 
     # get contents that wanted
-            links = soup.find_all('h2')
-          
+            links = soup.find_all('p', class_="content-description")
+            x = soup.find_all('span', class_="description")
             for link in links:
                   #href = link.get('href')
-                  print(link.text)
+                 content.append(link.text)
+            for link in x:
+                  #href = link.get('href')
+                 content.append(link.text)     
+            return content     
         else:
              print(f'Hata kodu: {response.status_code}')         
 if __name__=='__main__':
@@ -46,6 +51,6 @@ if __name__=='__main__':
         a.append(i) 
     for i in a:
           
-        crawling(i)        
+        print(crawling(i))        
         
      
