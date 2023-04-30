@@ -1,3 +1,4 @@
 *.xml
 todo/
-*.json
+node_modules/
+content.json
